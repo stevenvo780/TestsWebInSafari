@@ -1,7 +1,8 @@
 
 const { webkit } = require('playwright');
 
-// Configuraciones para cada tipo de dispositivo
+
+// Configuraciones para cada tipo de dispositivo y orientación
 const devices = {
   pc: {
     userAgent:
@@ -13,30 +14,55 @@ const devices = {
     locale: 'en-US',
     colorScheme: 'light',
   },
-  movil: {
+  'movil-vertical': {
     userAgent:
       'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) ' +
       'AppleWebKit/605.1.15 (KHTML, like Gecko) ' +
       'Version/16.0 Mobile/15E148 Safari/604.1',
-    viewport: { width: 390, height: 844 }, // iPhone 13 Pro
+    viewport: { width: 390, height: 844 }, // iPhone 13 Pro vertical
     deviceScaleFactor: 3,
     locale: 'es-ES',
     colorScheme: 'light',
   },
-  tablet: {
+  'movil-horizontal': {
+    userAgent:
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) ' +
+      'AppleWebKit/605.1.15 (KHTML, like Gecko) ' +
+      'Version/16.0 Mobile/15E148 Safari/604.1',
+    viewport: { width: 844, height: 390 }, // iPhone 13 Pro horizontal
+    deviceScaleFactor: 3,
+    locale: 'es-ES',
+    colorScheme: 'light',
+  },
+  'tablet-vertical': {
     userAgent:
       'Mozilla/5.0 (iPad; CPU OS 16_0 like Mac OS X) ' +
       'AppleWebKit/605.1.15 (KHTML, like Gecko) ' +
       'Version/16.0 Mobile/15E148 Safari/604.1',
-    viewport: { width: 834, height: 1112 }, // iPad Air
+    viewport: { width: 834, height: 1112 }, // iPad Air vertical
+    deviceScaleFactor: 2,
+    locale: 'es-ES',
+    colorScheme: 'light',
+  },
+  'tablet-horizontal': {
+    userAgent:
+      'Mozilla/5.0 (iPad; CPU OS 16_0 like Mac OS X) ' +
+      'AppleWebKit/605.1.15 (KHTML, like Gecko) ' +
+      'Version/16.0 Mobile/15E148 Safari/604.1',
+    viewport: { width: 1112, height: 834 }, // iPad Air horizontal
     deviceScaleFactor: 2,
     locale: 'es-ES',
     colorScheme: 'light',
   },
 };
 
-// Lee el argumento de línea de comandos
-const tipo = process.argv[2] || 'pc';
+
+// Lee el argumento de línea de comandos y determina orientación
+let tipo = (process.argv[2] || 'pc').toLowerCase();
+if (tipo === 'movil' || tipo === 'movil-vertical') tipo = 'movil-vertical';
+if (tipo === 'movil-horizontal') tipo = 'movil-horizontal';
+if (tipo === 'tablet' || tipo === 'tablet-vertical') tipo = 'tablet-vertical';
+if (tipo === 'tablet-horizontal') tipo = 'tablet-horizontal';
 const config = devices[tipo] || devices['pc'];
 
 (async () => {
